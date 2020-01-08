@@ -8,7 +8,6 @@ public class Game {
 
   public List<String> logs = new ArrayList<>();
   List<Player> playerList = new ArrayList<>();
-  int[] places = new int[6];
   LinkedList popQuestions = new LinkedList();
   LinkedList scienceQuestions = new LinkedList();
   LinkedList sportsQuestions = new LinkedList();
@@ -40,40 +39,25 @@ public class Game {
     return "Rock Question " + index;
   }
 
-  public boolean add(String playerName) {
+  public void add(String playerName) {
     playerList.add(new Player(playerName));
-    places[howManyPlayers()] = 0;
-
-    log(playerName + " was added");
-    log("They are player number " + playerList.size());
-    return true;
-  }
-
-  public int howManyPlayers() {
-    return playerList.size();
+    logPlayerWasAdded(playerName);
+    logNumberOfPlayersPlaying();
   }
 
   public void roll(int roll) {
     logWhoIsTheCurrentPlayer();
     logDiceRolled(roll);
-
     getCurrentPlayer().play(roll);
 
     if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
       logCurrentPlayerGettingOutOfPenaltyBox();
-      places[currentPlayer] = places[currentPlayer] + roll;
-      if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
-
       logCurrentPlayersLocation();
       logCategory();
       askQuestion();
     } else if (getCurrentPlayer().isInPenaltyBox()) {
       logCurrentPlayerNotGettingOutOfPenaltyBox();
     } else {
-
-      places[currentPlayer] = places[currentPlayer] + roll;
-      if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
-
       logCurrentPlayersLocation();
       logCategory();
       askQuestion();
@@ -98,15 +82,15 @@ public class Game {
 
 
   private String currentCategory() {
-    if (places[currentPlayer] == 0) { return "Pop"; }
-    if (places[currentPlayer] == 4) { return "Pop"; }
-    if (places[currentPlayer] == 8) { return "Pop"; }
-    if (places[currentPlayer] == 1) { return "Science"; }
-    if (places[currentPlayer] == 5) { return "Science"; }
-    if (places[currentPlayer] == 9) { return "Science"; }
-    if (places[currentPlayer] == 2) { return "Sports"; }
-    if (places[currentPlayer] == 6) { return "Sports"; }
-    if (places[currentPlayer] == 10) { return "Sports"; }
+    if (getCurrentPlayer().getPosition() == 0) { return "Pop"; }
+    if (getCurrentPlayer().getPosition() == 4) { return "Pop"; }
+    if (getCurrentPlayer().getPosition() == 8) { return "Pop"; }
+    if (getCurrentPlayer().getPosition() == 1) { return "Science"; }
+    if (getCurrentPlayer().getPosition() == 5) { return "Science"; }
+    if (getCurrentPlayer().getPosition() == 9) { return "Science"; }
+    if (getCurrentPlayer().getPosition() == 2) { return "Sports"; }
+    if (getCurrentPlayer().getPosition() == 6) { return "Sports"; }
+    if (getCurrentPlayer().getPosition() == 10) { return "Sports"; }
     return "Rock";
   }
 
@@ -157,6 +141,14 @@ public class Game {
     return !(getCurrentPlayer().getColdCoins() == 6);
   }
 
+  private void logNumberOfPlayersPlaying() {
+    log("They are player number " + playerList.size());
+  }
+
+  private void logPlayerWasAdded(String playerName) {
+    log(playerName + " was added");
+  }
+
   private void logCurrentPlayerPutInPenaltyBox() {
     log(getCurrentPlayerName() + " was sent to the penalty box");
   }
@@ -174,7 +166,7 @@ public class Game {
   }
 
   private void logCurrentPlayersLocation() {
-    log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
+    log(getCurrentPlayerName() + "'s new location is " + getCurrentPlayer().getPosition());
   }
 
   private void logCurrentPlayerGettingOutOfPenaltyBox() {

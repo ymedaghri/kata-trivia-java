@@ -33,7 +33,7 @@ class PlayerTest {
   }
 
   @ParameterizedTest(name = "when roll equals {arguments}")
-  @ValueSource(ints = { 1, 3, 5 })
+  @ValueSource(ints = {1, 3, 5})
   void playerShouldGetOutOfPenaltyBoxIfInItAndPlayingAnOddRoll(int roll) {
     // Given
     Player player = new Player("Vlad");
@@ -48,7 +48,7 @@ class PlayerTest {
   }
 
   @ParameterizedTest(name = "when roll equals {arguments}")
-  @ValueSource(ints = { 2, 4, 6 })
+  @ValueSource(ints = {2, 4, 6})
   void playerShouldNotGetOutOfPenaltyBoxIfInItAndPlayingAnEvenRoll(int roll) {
     // Given
     Player player = new Player("Vlad");
@@ -63,7 +63,7 @@ class PlayerTest {
   }
 
   @ParameterizedTest(name = "when roll equals {arguments}")
-  @ValueSource(ints = { 1, 2, 3, 4, 5, 6 })
+  @ValueSource(ints = {1, 2, 3, 4, 5, 6})
   void playerShouldNotGetOutOfPenaltyBoxIfNotInItAndPlayingAnyRoll(int roll) {
     // Given
     Player player = new Player("Vlad");
@@ -74,5 +74,32 @@ class PlayerTest {
     // Then
     Assertions.assertThat(player.isGettingOutOfPenaltyBox()).isFalse();
     Assertions.assertThat(player.isInPenaltyBox()).isFalse();
+  }
+
+  @ParameterizedTest(name = "when roll equals {arguments}")
+  @ValueSource(ints = {1, 2, 3, 4, 5, 6})
+  void playerShouldMoveWhenNotInPenaltyBox(int roll) {
+    // Given
+    Player player = new Player("Vlad");
+
+    // When
+    player.play(roll);
+
+    // Then
+    Assertions.assertThat(player.getPosition()).isEqualTo(roll);
+  }
+
+  @Test
+  void boardIsCircularAndContainTwelvePosition() {
+    // Given
+    Player player = new Player("Vlad");
+
+    // When
+    player.play(6);
+    player.play(4);
+    player.play(5);
+
+    // Then
+    Assertions.assertThat(player.getPosition()).isEqualTo(3);
   }
 }

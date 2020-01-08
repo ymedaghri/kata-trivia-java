@@ -2,6 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 public class Player {
 
+  int position;
   private String playerName;
   private int goldCoins;
   private boolean isInPenaltyBox;
@@ -32,11 +33,19 @@ public class Player {
   }
 
   public void play(int roll) {
-    isGettingOutOfPenaltyBox  = isInPenaltyBox && roll % 2 != 0;
+    isGettingOutOfPenaltyBox = isInPenaltyBox && roll % 2 != 0;
     isInPenaltyBox = isInPenaltyBox && !isGettingOutOfPenaltyBox;
+
+    if (!isInPenaltyBox) {
+      position = (position + roll) % 12;
+    }
   }
 
   public boolean isGettingOutOfPenaltyBox() {
     return isGettingOutOfPenaltyBox;
+  }
+
+  public int getPosition() {
+    return position;
   }
 }
