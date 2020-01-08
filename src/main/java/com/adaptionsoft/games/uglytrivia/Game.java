@@ -55,22 +55,22 @@ public class Game {
   }
 
   public void roll(int roll) {
-    log(getCurrentPlayerName() + " is the current player");
-    log("They have rolled a " + roll);
+    logWhoIsTheCurrentPlayer();
+    logDiceRolled(roll);
 
     if (getCurrentPlayer().isInPenaltyBox()) {
       if (roll % 2 != 0) {
         isGettingOutOfPenaltyBox = true;
 
-        log(getCurrentPlayerName() + " is getting out of the penalty box");
+        logCurrentPlayerGettingOutOfPenaltyBox();
         places[currentPlayer] = places[currentPlayer] + roll;
         if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
 
-        log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
-        log("The category is " + currentCategory());
+        logCurrentPlayersLocation();
+        logCategory();
         askQuestion();
       } else {
-        log(getCurrentPlayerName() + " is not getting out of the penalty box");
+        logCurrentPlayerNotGettingOutOfPenaltyBox();
         isGettingOutOfPenaltyBox = false;
       }
 
@@ -79,8 +79,8 @@ public class Game {
       places[currentPlayer] = places[currentPlayer] + roll;
       if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
 
-      log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
-      log("The category is " + currentCategory());
+      logCurrentPlayersLocation();
+      logCategory();
       askQuestion();
     }
 
@@ -95,10 +95,10 @@ public class Game {
   }
 
   private void askQuestion() {
-    if (currentCategory() == "Pop") { log(popQuestions.removeFirst()); }
-    if (currentCategory() == "Science") { log(scienceQuestions.removeFirst()); }
-    if (currentCategory() == "Sports") { log(sportsQuestions.removeFirst()); }
-    if (currentCategory() == "Rock") { log(rockQuestions.removeFirst()); }
+    if (currentCategory() == "Pop") { log((String)popQuestions.removeFirst()); }
+    if (currentCategory() == "Science") { log((String)scienceQuestions.removeFirst()); }
+    if (currentCategory() == "Sports") { log((String)sportsQuestions.removeFirst()); }
+    if (currentCategory() == "Rock") { log((String)rockQuestions.removeFirst()); }
   }
 
 
@@ -118,9 +118,9 @@ public class Game {
   public boolean wasCorrectlyAnswered() {
     if (getCurrentPlayer().isInPenaltyBox()) {
       if (isGettingOutOfPenaltyBox) {
-        log("Answer was correct!!!!");
+        logCorrectAnswer();
         getCurrentPlayer().receiveOneGoldCoin();
-        log(getCurrentPlayerName() + " now has " + getCurrentPlayer().getColdCoins() + " Gold Coins.");
+        logPlayerMoney();
 
         boolean winner = didPlayerWin();
         currentPlayer++;
@@ -136,9 +136,9 @@ public class Game {
 
     } else {
 
-      log("Answer was corrent!!!!");
+      logCorrectAnswer();
       getCurrentPlayer().receiveOneGoldCoin();
-      log(getCurrentPlayerName() + " now has " + getCurrentPlayer().getColdCoins() + " Gold Coins.");
+      logPlayerMoney();
 
       boolean winner = didPlayerWin();
       currentPlayer++;
@@ -149,8 +149,8 @@ public class Game {
   }
 
   public boolean wrongAnswer() {
-    log("Question was incorrectly answered");
-    log(getCurrentPlayerName() + " was sent to the penalty box");
+    logQuestionIncorrect();
+    logCurrentPlayerPutInPenaltyBox();
     getCurrentPlayer().setInPenaltyBox();
 
     currentPlayer++;
@@ -163,9 +163,48 @@ public class Game {
     return !(getCurrentPlayer().getColdCoins() == 6);
   }
 
-  public void log(Object message) {
+  private void logCurrentPlayerPutInPenaltyBox() {
+    log(getCurrentPlayerName() + " was sent to the penalty box");
+  }
 
-    logs.add((String)message);
+  private void logQuestionIncorrect() {
+    log("Question was incorrectly answered");
+  }
+
+  private void logCurrentPlayerNotGettingOutOfPenaltyBox() {
+    log(getCurrentPlayerName() + " is not getting out of the penalty box");
+  }
+
+  private void logCategory() {
+    log("The category is " + currentCategory());
+  }
+
+  private void logCurrentPlayersLocation() {
+    log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
+  }
+
+  private void logCurrentPlayerGettingOutOfPenaltyBox() {
+    log(getCurrentPlayerName() + " is getting out of the penalty box");
+  }
+
+  private void logDiceRolled(int roll) {
+    log("They have rolled a " + roll);
+  }
+
+  private void logWhoIsTheCurrentPlayer() {
+    log(getCurrentPlayerName() + " is the current player");
+  }
+
+  private void logPlayerMoney() {
+    log(getCurrentPlayerName() + " now has " + getCurrentPlayer().getColdCoins() + " Gold Coins.");
+  }
+
+  private void logCorrectAnswer() {
+    log("Answer was correct!!!!");
+  }
+
+  public void log(String message) {
+    logs.add(message);
     System.out.println(message);
   }
 }
