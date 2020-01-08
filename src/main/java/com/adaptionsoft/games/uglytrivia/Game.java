@@ -14,7 +14,6 @@ public class Game {
   LinkedList sportsQuestions = new LinkedList();
   LinkedList rockQuestions = new LinkedList();
   int currentPlayer = 0;
-  boolean isGettingOutOfPenaltyBox;
 
   public Game() {
     for (int i = 0; i < 50; i++) {
@@ -58,22 +57,18 @@ public class Game {
     logWhoIsTheCurrentPlayer();
     logDiceRolled(roll);
 
-    if (getCurrentPlayer().isInPenaltyBox()) {
-      if (roll % 2 != 0) {
-        isGettingOutOfPenaltyBox = true;
+    getCurrentPlayer().play(roll);
 
-        logCurrentPlayerGettingOutOfPenaltyBox();
-        places[currentPlayer] = places[currentPlayer] + roll;
-        if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
+    if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
+      logCurrentPlayerGettingOutOfPenaltyBox();
+      places[currentPlayer] = places[currentPlayer] + roll;
+      if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
 
-        logCurrentPlayersLocation();
-        logCategory();
-        askQuestion();
-      } else {
-        logCurrentPlayerNotGettingOutOfPenaltyBox();
-        isGettingOutOfPenaltyBox = false;
-      }
-
+      logCurrentPlayersLocation();
+      logCategory();
+      askQuestion();
+    } else if (getCurrentPlayer().isInPenaltyBox()) {
+      logCurrentPlayerNotGettingOutOfPenaltyBox();
     } else {
 
       places[currentPlayer] = places[currentPlayer] + roll;
@@ -95,10 +90,10 @@ public class Game {
   }
 
   private void askQuestion() {
-    if (currentCategory() == "Pop") { log((String)popQuestions.removeFirst()); }
-    if (currentCategory() == "Science") { log((String)scienceQuestions.removeFirst()); }
-    if (currentCategory() == "Sports") { log((String)sportsQuestions.removeFirst()); }
-    if (currentCategory() == "Rock") { log((String)rockQuestions.removeFirst()); }
+    if (currentCategory() == "Pop") { log((String) popQuestions.removeFirst()); }
+    if (currentCategory() == "Science") { log((String) scienceQuestions.removeFirst()); }
+    if (currentCategory() == "Sports") { log((String) sportsQuestions.removeFirst()); }
+    if (currentCategory() == "Rock") { log((String) rockQuestions.removeFirst()); }
   }
 
 
@@ -116,22 +111,21 @@ public class Game {
   }
 
   public boolean wasCorrectlyAnswered() {
-    if (getCurrentPlayer().isInPenaltyBox()) {
-      if (isGettingOutOfPenaltyBox) {
-        logCorrectAnswer();
-        getCurrentPlayer().receiveOneGoldCoin();
-        logPlayerMoney();
+    if (getCurrentPlayer().isGettingOutOfPenaltyBox()) {
+      logCorrectAnswer();
+      getCurrentPlayer().receiveOneGoldCoin();
+      logPlayerMoney();
 
-        boolean winner = didPlayerWin();
-        currentPlayer++;
-        if (currentPlayer == playerList.size()) { currentPlayer = 0; }
+      boolean winner = didPlayerWin();
+      currentPlayer++;
+      if (currentPlayer == playerList.size()) { currentPlayer = 0; }
 
-        return winner;
-      } else {
-        currentPlayer++;
-        if (currentPlayer == playerList.size()) { currentPlayer = 0; }
-        return true;
-      }
+      return winner;
+    } else if (getCurrentPlayer().isInPenaltyBox()) {
+
+      currentPlayer++;
+      if (currentPlayer == playerList.size()) { currentPlayer = 0; }
+      return true;
 
 
     } else {

@@ -3,8 +3,9 @@ package com.adaptionsoft.games.uglytrivia;
 public class Player {
 
   private String playerName;
-  private boolean isInPenaltyBox;
   private int goldCoins;
+  private boolean isInPenaltyBox;
+  private boolean isGettingOutOfPenaltyBox;
 
   public Player(String playerName) {
     this.playerName = playerName;
@@ -28,5 +29,14 @@ public class Player {
 
   public void receiveOneGoldCoin() {
     this.goldCoins++;
+  }
+
+  public void play(int roll) {
+    isGettingOutOfPenaltyBox  = isInPenaltyBox && roll % 2 != 0;
+    isInPenaltyBox = isInPenaltyBox && !isGettingOutOfPenaltyBox;
+  }
+
+  public boolean isGettingOutOfPenaltyBox() {
+    return isGettingOutOfPenaltyBox;
   }
 }
