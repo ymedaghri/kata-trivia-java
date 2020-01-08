@@ -17,4 +17,16 @@ public class PlayerTest {
     // Then
     Assertions.assertThat(player.isInPenaltyBox()).isTrue();
   }
+
+  @Test
+  public void playerCanWinGoldCoins() {
+    // Given
+    Player player = new Player("Vladimir");
+
+    // When
+    player.receiveOneGoldCoin();
+
+    // Then
+    Assertions.assertThat(player.getColdCoins()).isEqualTo(1);
+  }
 }

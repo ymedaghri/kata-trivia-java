@@ -9,7 +9,6 @@ public class Game {
   public List<String> logs = new ArrayList<>();
   List<Player> playerList = new ArrayList<>();
   int[] places = new int[6];
-  int[] purses = new int[6];
   LinkedList popQuestions = new LinkedList();
   LinkedList scienceQuestions = new LinkedList();
   LinkedList sportsQuestions = new LinkedList();
@@ -45,7 +44,6 @@ public class Game {
   public boolean add(String playerName) {
     playerList.add(new Player(playerName));
     places[howManyPlayers()] = 0;
-    purses[howManyPlayers()] = 0;
 
     log(playerName + " was added");
     log("They are player number " + playerList.size());
@@ -121,8 +119,8 @@ public class Game {
     if (getCurrentPlayer().isInPenaltyBox()) {
       if (isGettingOutOfPenaltyBox) {
         log("Answer was correct!!!!");
-        purses[currentPlayer]++;
-        log(getCurrentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
+        getCurrentPlayer().receiveOneGoldCoin();
+        log(getCurrentPlayerName() + " now has " + getCurrentPlayer().getColdCoins() + " Gold Coins.");
 
         boolean winner = didPlayerWin();
         currentPlayer++;
@@ -139,8 +137,8 @@ public class Game {
     } else {
 
       log("Answer was corrent!!!!");
-      purses[currentPlayer]++;
-      log(getCurrentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
+      getCurrentPlayer().receiveOneGoldCoin();
+      log(getCurrentPlayerName() + " now has " + getCurrentPlayer().getColdCoins() + " Gold Coins.");
 
       boolean winner = didPlayerWin();
       currentPlayer++;
@@ -162,7 +160,7 @@ public class Game {
 
 
   private boolean didPlayerWin() {
-    return !(purses[currentPlayer] == 6);
+    return !(getCurrentPlayer().getColdCoins() == 6);
   }
 
   public void log(Object message) {
