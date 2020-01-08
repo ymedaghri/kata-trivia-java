@@ -20,11 +20,23 @@ public class Game {
 
   public Game() {
     for (int i = 0; i < 50; i++) {
-      popQuestions.addLast("Pop Question " + i);
-      scienceQuestions.addLast(("Science Question " + i));
-      sportsQuestions.addLast(("Sports Question " + i));
+      popQuestions.addLast(createPopQuestion(i));
+      scienceQuestions.addLast(createScienceQuestion(i));
+      sportsQuestions.addLast(createSportsQuestion(i));
       rockQuestions.addLast(createRockQuestion(i));
     }
+  }
+
+  private String createSportsQuestion(int i) {
+    return "Sports Question " + i;
+  }
+
+  private String createScienceQuestion(int i) {
+    return "Science Question " + i;
+  }
+
+  private String createPopQuestion(int i) {
+    return "Pop Question " + i;
   }
 
   public String createRockQuestion(int index) {
@@ -32,7 +44,6 @@ public class Game {
   }
 
   public boolean add(String playerName) {
-
     players.add(playerName);
     places[howManyPlayers()] = 0;
     purses[howManyPlayers()] = 0;

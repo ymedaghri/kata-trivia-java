@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SomeTest {
@@ -19,7 +20,7 @@ public class SomeTest {
     }
   }
 
-  @Test
+  @Ignore
   public void utilitaireDeCaracterisation() {
 
 
