@@ -7,7 +7,7 @@ import java.util.List;
 public class Game {
 
   public List<String> logs = new ArrayList<>();
-  ArrayList players = new ArrayList();
+  List<Player> playerList = new ArrayList<>();
   int[] places = new int[6];
   int[] purses = new int[6];
   boolean[] inPenaltyBox = new boolean[6];
@@ -44,37 +44,37 @@ public class Game {
   }
 
   public boolean add(String playerName) {
-    players.add(playerName);
+    playerList.add(new Player(playerName));
     places[howManyPlayers()] = 0;
     purses[howManyPlayers()] = 0;
     inPenaltyBox[howManyPlayers()] = false;
 
     log(playerName + " was added");
-    log("They are player number " + players.size());
+    log("They are player number " + playerList.size());
     return true;
   }
 
   public int howManyPlayers() {
-    return players.size();
+    return playerList.size();
   }
 
   public void roll(int roll) {
-    log(players.get(currentPlayer) + " is the current player");
+    log(getCurrentPlayerName() + " is the current player");
     log("They have rolled a " + roll);
 
     if (inPenaltyBox[currentPlayer]) {
       if (roll % 2 != 0) {
         isGettingOutOfPenaltyBox = true;
 
-        log(players.get(currentPlayer) + " is getting out of the penalty box");
+        log(getCurrentPlayerName() + " is getting out of the penalty box");
         places[currentPlayer] = places[currentPlayer] + roll;
         if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
 
-        log(players.get(currentPlayer) + "'s new location is " + places[currentPlayer]);
+        log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
         log("The category is " + currentCategory());
         askQuestion();
       } else {
-        log(players.get(currentPlayer) + " is not getting out of the penalty box");
+        log(getCurrentPlayerName() + " is not getting out of the penalty box");
         isGettingOutOfPenaltyBox = false;
       }
 
@@ -83,11 +83,15 @@ public class Game {
       places[currentPlayer] = places[currentPlayer] + roll;
       if (places[currentPlayer] > 11) { places[currentPlayer] = places[currentPlayer] - 12; }
 
-      log(players.get(currentPlayer) + "'s new location is " + places[currentPlayer]);
+      log(getCurrentPlayerName() + "'s new location is " + places[currentPlayer]);
       log("The category is " + currentCategory());
       askQuestion();
     }
 
+  }
+
+  private String getCurrentPlayerName() {
+    return playerList.get(currentPlayer).getName();
   }
 
   private void askQuestion() {
@@ -116,16 +120,16 @@ public class Game {
       if (isGettingOutOfPenaltyBox) {
         log("Answer was correct!!!!");
         purses[currentPlayer]++;
-        log(players.get(currentPlayer) + " now has " + purses[currentPlayer] + " Gold Coins.");
+        log(getCurrentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
 
         boolean winner = didPlayerWin();
         currentPlayer++;
-        if (currentPlayer == players.size()) { currentPlayer = 0; }
+        if (currentPlayer == playerList.size()) { currentPlayer = 0; }
 
         return winner;
       } else {
         currentPlayer++;
-        if (currentPlayer == players.size()) { currentPlayer = 0; }
+        if (currentPlayer == playerList.size()) { currentPlayer = 0; }
         return true;
       }
 
@@ -134,11 +138,11 @@ public class Game {
 
       log("Answer was corrent!!!!");
       purses[currentPlayer]++;
-      log(players.get(currentPlayer) + " now has " + purses[currentPlayer] + " Gold Coins.");
+      log(getCurrentPlayerName() + " now has " + purses[currentPlayer] + " Gold Coins.");
 
       boolean winner = didPlayerWin();
       currentPlayer++;
-      if (currentPlayer == players.size()) { currentPlayer = 0; }
+      if (currentPlayer == playerList.size()) { currentPlayer = 0; }
 
       return winner;
     }
@@ -146,11 +150,11 @@ public class Game {
 
   public boolean wrongAnswer() {
     log("Question was incorrectly answered");
-    log(players.get(currentPlayer) + " was sent to the penalty box");
+    log(getCurrentPlayerName() + " was sent to the penalty box");
     inPenaltyBox[currentPlayer] = true;
 
     currentPlayer++;
-    if (currentPlayer == players.size()) { currentPlayer = 0; }
+    if (currentPlayer == playerList.size()) { currentPlayer = 0; }
     return true;
   }
 
